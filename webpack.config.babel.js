@@ -1,11 +1,6 @@
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-
-const entry = {
-    core: './src/js/core/index.js',
-    client: './src/js/client/index.js',
-    app: './src/js/index.js'
-}
+import HtmlWebpackHarddiskPlugin from 'html-webpack-harddisk-plugin';
 
 const resolve = {
     alias: {
@@ -32,30 +27,39 @@ const module = {
 
 export default [
     {
-        entry,
+        entry: {
+            core: './src/js/core/index.js',
+            client: './src/js/client/index.js',
+            app: './src/js/index.js'
+        },
         resolve,
         module,
         output: {
             filename: '[name].js',
-            path: path.resolve(__dirname, 'dist/build/client'),
+            path: path.resolve(__dirname, 'dist/build'),
         },
         devServer: {
-            contentBase: path.join(__dirname, 'src/js'),
+            contentBase: path.join(__dirname, 'dist/build'),
             compress: true,
             port: 9000
         },
         devtool: 'source-map',
         plugins: [
-            new HtmlWebpackPlugin()
+            new HtmlWebpackPlugin({
+                alwaysWriteToDisk: true
+            }),
+            new HtmlWebpackHarddiskPlugin()
         ]
     },
     {
-        entry,
+        entry: {
+            clientNode: './src/js/client/index.js'
+        },
         resolve,
         module,
         output: {
-            filename: '[name].node.js',
-            path: path.resolve(__dirname, 'dist/build/node'),
+            filename: 'templates.js',
+            path: path.resolve(__dirname, 'functions'),
             libraryTarget: 'commonjs2'
         },
     }
