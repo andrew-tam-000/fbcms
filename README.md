@@ -1,1 +1,6 @@
-# fbcms
+- pages
+    - [id]
+        - datePublished
+        - lastModified
+        - templateId
+        - path
