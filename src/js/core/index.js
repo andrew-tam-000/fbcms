@@ -14,12 +14,8 @@ import Toolbar from 'material-ui/Toolbar';
 import List, {ListItem} from 'material-ui/List';
 
 
-
-
-import Edit from '~/core/components/Edit';
+import Edit from '~/core/templates/Edit';
 import edit from '~/core/connectors/edit';
-
-import Homepage from '~/core/components/Edit';
 
 import {
     BrowserRouter as Router,
