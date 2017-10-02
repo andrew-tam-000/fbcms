@@ -1,10 +1,16 @@
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import webpack from 'webpack';
 
 const resolve = {
     alias: {
         '~': path.resolve(__dirname, 'src/js')
     }
+};
+
+const output = {
+    filename: '[name].js',
+    path: path.resolve(__dirname, 'dist/build'),
 };
 
 const module = {
@@ -18,7 +24,7 @@ const module = {
                     options: {
                         presets: ['env', 'react']
                     }
-                },
+                }
             ]
         },
     ]
@@ -26,18 +32,12 @@ const module = {
 
 export default [
     {
-        entry: {
-            core: './src/js/core/index.js',
-            client: './src/js/client/index.js',
-            index: './src/js/index.js'
-        },
+        entry: './src/js/index.js',
         resolve,
         module,
-        output: {
-            filename: '[name].js',
-            path: path.resolve(__dirname, 'dist/build'),
-        },
+        output,
         devServer: {
+            hot: true,
             before: app => {
 
                 // Remap the bundles to root
@@ -52,19 +52,9 @@ export default [
         },
         devtool: 'source-map',
         plugins: [
-            new HtmlWebpackPlugin()
+            new webpack.NamedModulesPlugin(),
+            new HtmlWebpackPlugin(),
+            new webpack.HotModuleReplacementPlugin()
         ]
     },
-    {
-        entry: {
-            clientNode: './src/js/client/index.js'
-        },
-        resolve,
-        module,
-        output: {
-            filename: 'templates.js',
-            path: path.resolve(__dirname, 'functions'),
-            libraryTarget: 'commonjs2'
-        },
-    }
 ]

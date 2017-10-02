@@ -7,7 +7,18 @@ const elem = document.createElement('div');
 elem.setAttribute('id', 'react');
 document.body.prepend(elem);
 
-ReactDOM.render(
-    <App/>,
+render(
+    App,
     elem
 );
+
+function render(Component, elem) {
+    ReactDOM.render(
+        <Component/>,
+        elem
+    );
+}
+
+module.hot.accept('./core/index.js', function() {
+    render(require('./core/index.js').default, elem);
+});
