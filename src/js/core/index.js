@@ -17,16 +17,17 @@ import Edit from '~/core/templates/Edit';
 import edit from '~/core/connectors/edit';
 
 import Homepage from '~/core/templates/Homepage';
+import homepage from '~/core/connectors/homepage';
 
 import {
-    BrowserRouter as Router,
+    HashRouter as Router,
     Route,
     Link
 } from 'react-router-dom';
 
 const MainContent = () => ([
-    <Route exact path='/edit' component={connect(...edit)(Edit)}/>,
-    <Route exact path='/' component={Homepage}/>
+    <Route exact path='/edit/:template/:id' component={edit(Edit)}/>,
+    <Route exact path='/' component={homepage(Homepage)}/>
 ]);
 
 const styles = {

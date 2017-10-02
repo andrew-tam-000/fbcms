@@ -52,9 +52,21 @@ export default [
         },
         devtool: 'source-map',
         plugins: [
+            new webpack.HotModuleReplacementPlugin(),
             new webpack.NamedModulesPlugin(),
-            new HtmlWebpackPlugin(),
-            new webpack.HotModuleReplacementPlugin()
+            new HtmlWebpackPlugin()
         ]
     },
+    {
+        entry: {
+            clientNode: './src/js/client/index.js'
+        },
+        resolve,
+        module,
+        output: {
+            filename: 'templates.js',
+            path: path.resolve(__dirname, 'functions'),
+            libraryTarget: 'commonjs2'
+        },
+    }
 ]

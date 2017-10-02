@@ -4,3 +4,17 @@
         - lastModified
         - templateId
         - path
+- templates
+    - [id]
+        - fields
+            - field1
+                - id
+                - type
+- pageContent
+    - [id]
+        - content
+            - hello
+        - date
+            - wow
+        - one
+            - ok
