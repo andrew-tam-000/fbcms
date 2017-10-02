@@ -1,6 +1,5 @@
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import HtmlWebpackHarddiskPlugin from 'html-webpack-harddisk-plugin';
 
 const resolve = {
     alias: {
@@ -30,7 +29,7 @@ export default [
         entry: {
             core: './src/js/core/index.js',
             client: './src/js/client/index.js',
-            app: './src/js/index.js'
+            index: './src/js/index.js'
         },
         resolve,
         module,
@@ -39,16 +38,21 @@ export default [
             path: path.resolve(__dirname, 'dist/build'),
         },
         devServer: {
-            contentBase: path.join(__dirname, 'dist/build'),
+            before: app => {
+
+                // Remap the bundles to root
+                app.get('*', (req, res, next) => {
+                    req.url = path.join('/dist/build/', req.url);
+                    next('route');
+                })
+
+            },
             compress: true,
             port: 9000
         },
         devtool: 'source-map',
         plugins: [
-            new HtmlWebpackPlugin({
-                alwaysWriteToDisk: true
-            }),
-            new HtmlWebpackHarddiskPlugin()
+            new HtmlWebpackPlugin()
         ]
     },
     {
