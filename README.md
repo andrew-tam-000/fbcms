@@ -1,20 +1,30 @@
-- pages
-    - [id]
-        - datePublished
-        - lastModified
-        - templateId
-        - path
-- templates
-    - [id]
-        - fields
-            - field1
-                - id
-                - type
-- pageContent
-    - [id]
-        - content
-            - hello
-        - date
-            - wow
-        - one
-            - ok
+- Resources
+    - \_admin
+        - This will be the url for the CMS
+    - dynamicRoutes
+        - This is how the core project will be served
+
+- Schema
+    - pages
+        - [id]
+            - datePublished
+            - lastModified
+            - templateId
+            - path
+                - /test
+            - slug
+                - wow-test-this
+    - templates
+        - [id]
+            - fields
+                - field1
+                    - id
+                    - type
+    - pageContent
+        - [id]
+            - content
+                - hello
+            - date
+                - wow
+            - one
+                - ok

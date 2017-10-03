@@ -5,6 +5,16 @@
             "firebase.json",
             "**/.*",
             "**/node_modules/**"
+        ],
+        "rewrites": [
+            {
+                "source": "/_admin",
+                "destination": "/_admin.html"
+            },
+            {
+                "source": "**",
+                "function": "render"
+            }
         ]
     }
 }

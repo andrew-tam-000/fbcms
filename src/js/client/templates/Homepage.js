@@ -1,9 +1,17 @@
 import React from 'react';
-import Default from '~/client/layouts/Default'
 
-const Homepage = () => (
+const Homepage = ({content, date, title}) => (
     <div>
-        Homepage
+        <div>
+            { content }
+        </div>
+        <div>
+            { date }
+        </div>
+        <div>
+            { title }
+        </div>
+        hello
     </div>
 );
 

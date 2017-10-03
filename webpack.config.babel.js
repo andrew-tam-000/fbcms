@@ -1,6 +1,7 @@
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import webpack from 'webpack';
+import WriteFilePlugin from 'write-file-webpack-plugin';
 
 const resolve = {
     alias: {
@@ -68,5 +69,6 @@ export default [
             path: path.resolve(__dirname, 'functions'),
             libraryTarget: 'commonjs2'
         },
+        target: 'node'
     }
 ]

@@ -3,6 +3,8 @@ const http = require('http');
 const fs = require('fs');
 const ReactDOMServer = require('react-dom/server');
 const functions = require('firebase-functions');
+const _ = require('lodash');
+const { URL } = require('url');
 
 // The Firebase Admin SDK to access the Firebase Realtime Database.
 const admin = require('firebase-admin');
@@ -40,22 +42,50 @@ exports.publishPage = functions.database.ref('pages/{id}/lastPublished')
 ;
 
 exports.render = functions.https.onRequest((req, res) => {
-    //http.get( 'http://localhost:5000/node/client.node.js', function( response ){
-    https.get( 'https://fbcms.firebaseapp.com/node/client.node.js', function( response ){
 
-        var file = fs.createWriteStream('/tmp/templates.js');
+    // TODO: Don't capture css/js/images, etc -- only catch routes
+    const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    const urlObj = new URL(fullUrl);
+    const urlIdentifier = _.last(_.split(urlObj.pathname, '/'));
 
-        response.pipe(file)
+    getPageIdFromUrlIdentifier(admin.database(), urlIdentifier)
+        .then(
+            pageId => getPageDataForPageId(admin.database(), pageId)
+        )
+        .then(
+            pageData => {
+                const Templates = require('./templates').default;
+                //const Templates = require('./templates').default;
+                const Page = Templates.homepage;
 
-        file.on('finish', function() {
-            file.close(function() {
-                const templates = require('/tmp/templates').default;
-                const Page = templates.homepage;
                 res.send(
-                    ReactDOMServer.renderToStaticMarkup(Page({}))
-                )
-            });
-        });
+                    ReactDOMServer.renderToStaticMarkup(
+                        Page({
+                            bodyProps: pageData
+                        })
+                    )
+                );
+            }
+        )
+    ;
 
-    });
 });
+
+// TODO: Handle multiple url identifiers ( at different paths )
+function getPageIdFromUrlIdentifier(database, urlIdentifier) {
+    return database
+        .ref('/pages')
+        .orderByChild('identifier')
+        .equalTo(urlIdentifier)
+        .once('value')
+        .then( snapshot => _.first(_.keys(snapshot.val())))
+    ;
+}
+
+function getPageDataForPageId(database, pageId) {
+    return database
+        .ref(`/pageContent/${pageId}`)
+        .once('value')
+        .then( snapshot => snapshot.val())
+    ;
+}

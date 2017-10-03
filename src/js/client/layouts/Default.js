@@ -27,13 +27,9 @@ const Default = ({
             <link rel="stylesheet" href="css/main.css"/>
         </head>
         <body>
-
             <Header {...headerProps}/>
-
             <Body {...bodyProps}/>
-
             <Footer {...footerProps}/>
-
         </body>
     </html>
 );

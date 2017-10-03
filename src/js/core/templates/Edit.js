@@ -6,13 +6,12 @@ import TextField from 'material-ui/TextField';
 import firebase from '~/core/firebase/index';
 const database = firebase.database();
 
-
 const onChange = pageId => e => {
     const val = e.target.value;
     const fieldName = e.target.getAttribute('id');
 
     database.ref(`pageContent/${pageId}/${fieldName}`).set(val);
-    database.ref(`pageContent/${pageId}/lasModified`).set(new Date().toISOString());
+    database.ref(`pageContent/${pageId}/lastModified`).set(new Date().toISOString());
 };
 
 const ConnectedTextField = connect(
@@ -22,30 +21,9 @@ const ConnectedTextField = connect(
     })
 )(TextField);
 
-/*
-const fieldsWithComponent = _.mapValues(
-    fields,
-    fieldData => {
-
-        const MappedComponent = getComponentForType(_.get(fieldData, 'type'));
-
-        return _.assign(
-            {},
-            fieldData,
-            {
-                Component: connect(
-                    state => ({}),
-                    () => ({ onChange: e => onChange(id)(e)
-                    })
-                )(MappedComponent)
-            }
-        )
-    }
-);
-*/
-
-const Edit = ({pageContent, fields, match: {params: {id}}}) => (
-    _.map(
+const Edit = ({pageContent, fields, match: {params: {id}}}) => ([
+    'Preview',
+    ..._.map(
         fields,
         ({ id: fieldName, type}) => {
 
@@ -61,7 +39,7 @@ const Edit = ({pageContent, fields, match: {params: {id}}}) => (
             )
         }
     )
-);
+]);
 
  export default Edit;
 
