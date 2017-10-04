@@ -2,8 +2,10 @@ import React from 'react';
 import _ from 'lodash';
 
 import Default from '~/client/layouts/Default';
+import Head from '~/client/components/Head';
 import Header from '~/client/components/Header';
 import Footer from '~/client/components/Footer';
+
 
 // Dynamically load all the templates into webpack
 const templateContext = require.context('~/client/templates', false, /.js$/);
@@ -25,9 +27,12 @@ export default allTemplates;
 function createTemplate(Template) {
     return props => (
         <Default
+
+            Head={Head}
             Body={Template}
             Header={Header}
             Footer={Footer}
+
             {...props}
         />
     )

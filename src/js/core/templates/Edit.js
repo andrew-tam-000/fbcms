@@ -35,7 +35,6 @@ const Edit = ({pageContent, fields, match: {params: {id}}}) => ([
                     id={fieldName}
                     label={fieldName}
                     value={_.get(pageContent, fieldName) }
-                    pageId={id}
                 />
             )
         }

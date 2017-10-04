@@ -54,7 +54,9 @@ export default [
         plugins: [
             new webpack.HotModuleReplacementPlugin(),
             new webpack.NamedModulesPlugin(),
-            new HtmlWebpackPlugin()
+            new HtmlWebpackPlugin({
+                template: path.resolve(__dirname, 'index.html.template'),
+            })
         ]
     },
     {

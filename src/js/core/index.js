@@ -42,6 +42,8 @@ const styles = {
         position: 'relative'
     },
     contentContainer: {
+        // TODO Fix this with flex box
+        marginLeft: 100,
         display: 'flex',
         flexDirection: 'column',
         flex: 1
@@ -52,19 +54,22 @@ const App = () => (
     <Provider store={store}>
         <Router>
             <div style={styles.mainContainer}>
-                {/*
                 <Drawer
                     type='permanent'
                 >
                     <List>
                         <ListItem>
-                            <Link to='edit'>
-                                Edit
+                            <Link to='/'>
+                                Home
+                            </Link>
+                        </ListItem>
+                        <ListItem>
+                            <Link to='create'>
+                                Create
                             </Link>
                         </ListItem>
                     </List>
                 </Drawer>
-                */}
                 <div style={styles.contentContainer}>
                     <AppBar style={styles.appBar}>
                         <Toolbar>
