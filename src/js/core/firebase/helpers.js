@@ -51,3 +51,25 @@ export function createPage({metaData: { template, slug, path, title }, pageData}
 
     })
 }
+
+export function updatePage({metaData: { slug, path, title, pageId }, pageData}) {
+        return Promise.all([
+            firebase
+                .database()
+                .ref(`/pageContent/${pageId}`)
+                .update(
+                    pageData
+                )
+            , firebase
+                .database()
+                .ref(`/pages/${pageId}`)
+                .update({
+                    lastModified: getCurrentTime(),
+                    slug,
+                    title,
+                    path: path || '/'
+                })
+        ])
+            .then( () => pageId)
+            .catch( e => new Error(e))
+}

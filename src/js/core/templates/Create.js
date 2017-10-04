@@ -6,6 +6,10 @@ import ReactDOM from 'react-dom';
 import { getComponentForType, getDataFromForm } from '~/core/helpers/index';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
+import PageFields from '~/core/components/PageFields';
+import createPageFields from '~/core/connectors/createPageFields';
+
+const ConnectedPageFields = createPageFields(PageFields);
 
 class Create extends Component {
 
@@ -77,53 +81,10 @@ class Create extends Component {
                 </Menu>
                 {
                     this.state.selectedTemplate ? ([
-                        _.map(
-                            ['title', 'slug'],
-                            key => (
-                                <div>
-                                    <TextField
-                                        inputRef={ ref => this[key] = ref }
-                                        name={key}
-                                        placeholder={key}
-                                    />
-                                </div>
-                            )
-                        ),
-                        <form ref={ form => this.form = form }>
-                            {
-                                _.map(
-                                    _.get(fieldsByTemplate, this.state.selectedTemplate),
-                                    ({ id: fieldId, type }) => {
-                                        const Component = getComponentForType(type);
-                                        return (
-                                            <div>
-                                                <Component
-                                                    name={fieldId}
-                                                    placeholder={fieldId}
-                                                />
-                                            </div>
-                                        );
-                                    }
-                                )
-                            }
-                            <Button
-                                onClick={ e => (
-                                    createPage({
-                                        pageData: getDataFromForm(this.form),
-                                        metaData: {
-                                            title: this.title.value,
-                                            template: this.state.selectedTemplate,
-                                            slug: this.slug.value
-                                        }
-                                    })
-                                        .then( () => history.push('/'))
-                                )}
-                                raised
-                                color='primary'
-                            >
-                                Create page
-                            </Button>
-                        </form>
+                        <ConnectedPageFields
+                            templateName={this.state.selectedTemplate}
+                            onSubmitSuccess={() => history.push('/')}
+                        />
                     ]) : (
                         null
                     )
