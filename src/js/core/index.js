@@ -12,6 +12,8 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import List, {ListItem} from 'material-ui/List';
 
+import Create from '~/core/templates/Create';
+import create from '~/core/connectors/create';
 
 import Edit from '~/core/templates/Edit';
 import edit from '~/core/connectors/edit';
@@ -26,6 +28,7 @@ import {
 } from 'react-router-dom';
 
 const MainContent = () => ([
+    <Route exact path='/create' component={create(Create)}/>,
     <Route exact path='/edit/:template/:id' component={edit(Edit)}/>,
     <Route exact path='/' component={homepage(Homepage)}/>
 ]);

@@ -11,10 +11,10 @@ const Homepage = ({pages}) => (
         {
             _.map(
                 _.values(pages),
-                ({name, id, template}) => (
+                ({title, id, template}) => (
                     <ListItem>
                         <Link to={`/edit/${template}/${id}`}>
-                            { name }
+                            { title }
                         </Link>
                     </ListItem>
                 )

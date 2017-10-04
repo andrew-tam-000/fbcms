@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import AppBar from 'material-ui/AppBar';
 import TextField from 'material-ui/TextField';
 import firebase from '~/core/firebase/index';
+import { getCurrentTime } from '~/core/helpers/index';
 const database = firebase.database();
 
 const onChange = pageId => e => {
@@ -11,7 +12,7 @@ const onChange = pageId => e => {
     const fieldName = e.target.getAttribute('id');
 
     database.ref(`pageContent/${pageId}/${fieldName}`).set(val);
-    database.ref(`pageContent/${pageId}/lastModified`).set(new Date().toISOString());
+    database.ref(`pageContent/${pageId}/lastModified`).set(getCurrentTime());
 };
 
 const ConnectedTextField = connect(
@@ -50,4 +51,3 @@ function getComponentForType(type) {
         'div'
     );
 };
-

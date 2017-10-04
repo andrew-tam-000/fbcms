@@ -75,7 +75,7 @@ exports.render = functions.https.onRequest((req, res) => {
 function getPageIdFromUrlIdentifier(database, urlIdentifier) {
     return database
         .ref('/pages')
-        .orderByChild('identifier')
+        .orderByChild('slug')
         .equalTo(urlIdentifier)
         .once('value')
         .then( snapshot => _.first(_.keys(snapshot.val())))
