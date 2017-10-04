@@ -10,6 +10,9 @@ export function createPage({metaData: { template, slug, path, title }, pageData}
         else if (!template) {
             reject( new Error('No template provided'))
         }
+        else if (!title) {
+            reject( new Error('No title provided'))
+        }
 
         const newPageId = firebase
             .database()
