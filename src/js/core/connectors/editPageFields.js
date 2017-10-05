@@ -2,16 +2,27 @@ import _ from 'lodash';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firebaseConnect } from 'react-redux-firebase';
+import { push } from 'react-router-redux';
 import * as firebaseHelpers from '~/core/firebase/helpers';
 
 export default compose(
     firebaseConnect([
-        'pageContent/',
-        'templates/',
-        'pages/',
+        {
+            type: 'once',
+            path: 'pageContent/'
+        },
+        {
+            type: 'once',
+            path: 'pages/'
+        },
+        {
+            type: 'once',
+            path: 'templates/'
+        },
     ]),
     connect(
         ({ firebase: { data: { pageContent, templates, pages } }}, { pageId }) => {
+            console.log(pages, pageContent);
 
             const template = _.get(pages, [pageId, 'template']);
             const pageFields = _.get(templates, [template, 'fields']);
@@ -36,7 +47,8 @@ export default compose(
             onSubmit: ({pageData, metaData}) => firebaseHelpers.updatePage({
                 pageData,
                 metaData: _.assign({}, metaData, { pageId })
-            })
+            }),
+            onSubmitSuccess: () => dispatch(push('/'))
         })
     )
 );

@@ -5,8 +5,18 @@ import { firebaseConnect } from 'react-redux-firebase'
 
 export default compose(
     firebaseConnect([
-        'pageContent/',
-        'templates/'
+        {
+            type: 'once',
+            path: 'pageContent/'
+        },
+        {
+            type: 'once',
+            path: 'templates/'
+        },
+        {
+            type: 'once',
+            path: 'pages/'
+        }
     ]),
     connect(
         ({ firebase: { data: { pageContent, templates } }}, { match: { params: { template, id } } }) => {

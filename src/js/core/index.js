@@ -1,37 +1,21 @@
 import React from 'react';
 
-import {
-    Provider,
-    connect
-} from 'react-redux';
+import { Provider } from 'react-redux';
 
 import store from '~/core/redux/store';
+import { ConnectedRouter } from 'react-router-redux'
 
+import Routes from '~/core/routes';
 import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import List, {ListItem} from 'material-ui/List';
-
-import Create from '~/core/templates/Create';
-import create from '~/core/connectors/create';
-
-import Edit from '~/core/templates/Edit';
-import edit from '~/core/connectors/edit';
-
-import Homepage from '~/core/templates/Homepage';
-import homepage from '~/core/connectors/homepage';
+import history from '~/core/history';
 
 import {
     HashRouter as Router,
-    Route,
     Link
 } from 'react-router-dom';
-
-const MainContent = () => ([
-    <Route exact path='/create' component={create(Create)}/>,
-    <Route exact path='/edit/:template/:id' component={edit(Edit)}/>,
-    <Route exact path='/' component={homepage(Homepage)}/>
-]);
 
 const styles = {
     mainContainer: {
@@ -43,7 +27,7 @@ const styles = {
     },
     contentContainer: {
         // TODO Fix this with flex box
-        marginLeft: 100,
+        marginLeft: 200,
         display: 'flex',
         flexDirection: 'column',
         flex: 1
@@ -52,7 +36,7 @@ const styles = {
 
 const App = () => (
     <Provider store={store}>
-        <Router>
+        <ConnectedRouter history={history}>
             <div style={styles.mainContainer}>
                 <Drawer
                     type='permanent'
@@ -64,8 +48,8 @@ const App = () => (
                             </Link>
                         </ListItem>
                         <ListItem>
-                            <Link to='create'>
-                                Create
+                            <Link to='/create'>
+                                Create Page
                             </Link>
                         </ListItem>
                     </List>
@@ -76,10 +60,10 @@ const App = () => (
                             Name
                         </Toolbar>
                     </AppBar>
-                    <MainContent/>
+                    <Routes/>
                 </div>
             </div>
-        </Router>
+        </ConnectedRouter>
     </Provider>
 );
 

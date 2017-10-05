@@ -11,7 +11,7 @@ const PageFields = ({pageFields, pageData, templateName, onSubmit, onSubmitSucce
         _.map(
             ['title', 'slug'],
             key => (
-                <div>
+                <div key={key}>
                     <TextField
                         inputRef={ ref => refs[key] = ref }
                         name={key}
@@ -21,14 +21,14 @@ const PageFields = ({pageFields, pageData, templateName, onSubmit, onSubmitSucce
                 </div>
             )
         ),
-        <form ref={ form => refs.form = form }>
+        <form key='form' ref={ form => refs.form = form }>
             {
                 _.map(
                     pageFields,
                     ({ id: fieldId, type }) => {
                         const Component = getComponentForType(type);
                         return (
-                            <div>
+                            <div key={fieldId}>
                                 <Component
                                     name={fieldId}
                                     placeholder={fieldId}

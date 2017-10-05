@@ -6,8 +6,14 @@ import * as firebaseHelpers from '~/core/firebase/helpers';
 
 export default compose(
     firebaseConnect([
-        'pageContent/',
-        'templates/'
+        {
+            type: 'once',
+            path: 'pageContent/'
+        },
+        {
+            type: 'once',
+            path: 'templates/'
+        }
     ]),
     connect(
         ({ firebase: { data: { pageContent, templates } }}, { match: { params: { template, id } } }) => {

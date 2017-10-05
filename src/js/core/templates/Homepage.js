@@ -12,7 +12,7 @@ const Homepage = ({pages}) => (
             _.map(
                 _.values(pages),
                 ({title, id, template}) => (
-                    <ListItem>
+                    <ListItem key={id}>
                         <Link to={`/edit/${template}/${id}`}>
                             { title }
                         </Link>

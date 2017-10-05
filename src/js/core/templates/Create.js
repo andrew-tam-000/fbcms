@@ -83,7 +83,6 @@ class Create extends Component {
                     this.state.selectedTemplate ? ([
                         <ConnectedPageFields
                             templateName={this.state.selectedTemplate}
-                            onSubmitSuccess={() => history.push('/')}
                         />
                     ]) : (
                         null

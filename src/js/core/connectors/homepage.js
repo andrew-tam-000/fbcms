@@ -4,9 +4,15 @@ import { firebaseConnect } from 'react-redux-firebase'
 
 export default compose(
     firebaseConnect([
-        'pages/'
+        {
+            type: 'once',
+            path: 'pages/'
+        }
     ]),
     connect(
-        ({ firebase: { data: { pages} }}) => ({ pages })
+        ({ firebase: { data: { pages} }}) => {
+            console.log(pages);
+            return { pages };
+        }
     )
 );

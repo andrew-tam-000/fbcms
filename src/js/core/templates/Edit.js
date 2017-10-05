@@ -11,7 +11,6 @@ const ConnectedPageFields = editPageFields(PageFields);
 const Edit = ({history, match: {params: {id}}}) => (
     <ConnectedPageFields
         pageId={id}
-        onSubmitSuccess={() => history.push('/')}
     />
 );
 
