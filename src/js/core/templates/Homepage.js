@@ -10,14 +10,20 @@ const Homepage = ({pages}) => (
     <List>
         {
             _.map(
-                _.values(pages),
-                ({title, id, template}) => (
-                    <ListItem key={id}>
-                        <Link to={`/edit/${template}/${id}`}>
-                            { title }
-                        </Link>
-                    </ListItem>
-                )
+                _(pages)
+                    .values()
+                    .compact()
+                    .value()
+                ,
+                ({title, id, template}) => {
+                    return (
+                        <ListItem key={id}>
+                            <Link to={`/edit/${template}/${id}`}>
+                                { title }
+                            </Link>
+                        </ListItem>
+                    );
+                }
             )
         }
     </List>

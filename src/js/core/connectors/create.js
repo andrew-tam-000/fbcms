@@ -1,22 +1,11 @@
 import _ from 'lodash';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect } from 'react-redux-firebase';
 import * as firebaseHelpers from '~/core/firebase/helpers';
 
 export default compose(
-    firebaseConnect([
-        {
-            type: 'once',
-            path: 'pageContent/'
-        },
-        {
-            type: 'once',
-            path: 'templates/'
-        }
-    ]),
     connect(
-        ({ firebase: { data: { pageContent, templates } }}, { match: { params: { template, id } } }) => {
+        ({ firebase: { pageContent, templates }}, { match: { params: { template, id } } }) => {
 
             return {
                 templates: _.keys(templates),

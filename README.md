@@ -6,22 +6,30 @@
 
 - Schema
     - pages
-        - [id]
-            - datePublished
+        - [pageId]
+            - id
+            - published
             - lastModified
-            - templateId
+            - template
             - path
                 - /test
             - slug
                 - wow-test-this
+            - title
+                - hello
     - templates
-        - [id]
+        - [templateId]
             - fields
                 - field1
                     - id
                     - type
     - pageContent
-        - [id]
+        - [pageId]
+
+    - versions
+        - [versionId]
+            - id
+            - pageId
             - content
                 - hello
             - date

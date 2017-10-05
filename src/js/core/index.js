@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Provider } from 'react-redux';
 
-import store from '~/core/redux/store';
 import { ConnectedRouter } from 'react-router-redux'
 
 import Routes from '~/core/routes';
@@ -34,7 +33,7 @@ const styles = {
     }
 }
 
-const App = () => (
+const App = ({store}) => (
     <Provider store={store}>
         <ConnectedRouter history={history}>
             <div style={styles.mainContainer}>
