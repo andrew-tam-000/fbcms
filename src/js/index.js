@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import App from '~/core/index';
 import Templates from '~/client/index';
 import firebaseApp from '~/core/firebase/index';
-import store from '~/core/redux/store';
+import storeCreator from '~/core/redux/storeCreator';
 
 const elem = document.createElement('div');
 elem.setAttribute('id', 'react');
@@ -19,7 +19,7 @@ firebaseApp
                 App,
                 elem,
                 {
-                    store: store({
+                    store: storeCreator({
                         firebase: baseSnapshot.val()
                     })
                 }
