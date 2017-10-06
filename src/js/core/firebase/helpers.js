@@ -1,6 +1,16 @@
 import firebase from '~/core/firebase/index';
 import { getCurrentTime } from '~/core/helpers/index';
 
+async function getTemplateFromPageId(pageId) {
+    const snapshot = await firebase
+        .database()
+        .ref(`/pages/${pageId}/template`)
+        .once('value')
+    ;
+
+    return snapshot.val();
+}
+
 async function templateHasUrl(template) {
     const snapshot = await firebase
         .database()
@@ -31,6 +41,7 @@ async function setData(ref, data) {
 }
 
 export async function createPage({metaData: { template, slug, path, title }, pageData}) {
+
     const mustHaveSlug = await templateHasUrl(template);
 
     if ( mustHaveSlug && !slug) {
@@ -85,7 +96,19 @@ export async function createPage({metaData: { template, slug, path, title }, pag
 
 }
 
-export function updatePage({metaData: { slug, path, title, pageId }, pageData}) {
+export async function updatePage({metaData: { slug, path, title, pageId }, pageData}) {
+
+    const mustHaveSlug = await templateHasUrl(
+        await getTemplateFromPageId(pageId)
+    );
+
+    if ( mustHaveSlug && !slug) {
+        throw new Error('No slug provided');
+    }
+    else if (!title) {
+        throw new Error('No title provided');
+    }
+
     return Promise.all([
         firebase
             .database()
@@ -96,12 +119,22 @@ export function updatePage({metaData: { slug, path, title, pageId }, pageData}) 
         , firebase
             .database()
             .ref(`/pages/${pageId}`)
-            .update({
-                lastModified: getCurrentTime(),
-                slug,
-                title,
-                path: path || '/'
-            })
+            .update(
+                _.assign(
+                    {
+                        lastModified: getCurrentTime(),
+                        title,
+                    },
+                    mustHaveSlug ? (
+                        {
+                            slug,
+                            path: path || '/'
+                        }
+                    ) : (
+                        {}
+                    )
+                )
+            )
     ])
         .then( () => pageId)
         .catch( e => new Error(e))
