@@ -1,75 +1,108 @@
 import firebase from '~/core/firebase/index';
 import { getCurrentTime } from '~/core/helpers/index';
 
-export function createPage({metaData: { template, slug, path, title }, pageData}) {
-    return new Promise( (resolve, reject) => {
+async function templateHasUrl(template) {
+    const snapshot = await firebase
+        .database()
+        .ref(`/templates/${template}/hasUrl`)
+        .once('value')
+    ;
 
-        if (!slug) {
-            reject( new Error('No slug provided'))
-        }
-        else if (!template) {
-            reject( new Error('No template provided'))
-        }
-        else if (!title) {
-            reject( new Error('No title provided'))
-        }
+    return snapshot.val();
+}
 
-        const newPageId = firebase
-            .database()
-            .ref('/pageContent')
-            .push()
-            .key
-        ;
+function getNewKeyForRef(ref) {
+    return firebase
+        .database()
+        .ref(ref)
+        .push()
+        .key
+    ;
+}
 
-        Promise.all([
-            firebase
-                .database()
-                .ref(`/pageContent/${newPageId}`)
-                .set(
-                    _.assign(
-                        {},
-                        pageData,
+async function setData(ref, data) {
+    return firebase
+        .database()
+        .ref(ref)
+        .set(
+            data
+        )
+    ;
+}
+
+export async function createPage({metaData: { template, slug, path, title }, pageData}) {
+    const mustHaveSlug = await templateHasUrl(template);
+
+    if ( mustHaveSlug && !slug) {
+        throw new Error('No slug provided');
+    }
+    else if (!template) {
+        throw new Error('No template provided');
+    }
+    else if (!title) {
+        throw new Error('No title provided');
+    }
+
+    const newPageId = getNewKeyForRef('/pageContent');
+
+    try {
+        await Promise.all([
+            setData(
+                `/pageContent/${newPageId}`,
+                _.assign(
+                    {},
+                    pageData,
+                    {
+                        id: newPageId,
+                    },
+                )
+            ),
+            setData(
+                `/pages/${newPageId}`,
+                _.assign(
+                    {
+                        lastModified: getCurrentTime(),
+                        id: newPageId,
+                        template,
+                        title,
+                    },
+                    mustHaveSlug ? (
                         {
-                            id: newPageId,
-                        },
+                            slug,
+                            path: path || '/'
+                        }
+                    ) : (
+                        {}
                     )
                 )
-            , firebase
-                .database()
-                .ref(`/pages/${newPageId}`)
-                .set({
-                    lastModified: getCurrentTime(),
-                    id: newPageId,
-                    slug,
-                    template,
-                    title,
-                    path: path || '/'
-                })
-        ])
-            .then( () => resolve(newPageId))
-            .catch( e => reject(e))
+            )
+        ]);
+        return newPageId;
+    }
+    catch (e) {
+        throw e;
+    }
 
-    })
 }
 
 export function updatePage({metaData: { slug, path, title, pageId }, pageData}) {
-        return Promise.all([
-            firebase
-                .database()
-                .ref(`/pageContent/${pageId}`)
-                .update(
-                    pageData
-                )
-            , firebase
-                .database()
-                .ref(`/pages/${pageId}`)
-                .update({
-                    lastModified: getCurrentTime(),
-                    slug,
-                    title,
-                    path: path || '/'
-                })
-        ])
-            .then( () => pageId)
-            .catch( e => new Error(e))
+    return Promise.all([
+        firebase
+            .database()
+            .ref(`/pageContent/${pageId}`)
+            .update(
+                pageData
+            )
+        , firebase
+            .database()
+            .ref(`/pages/${pageId}`)
+            .update({
+                lastModified: getCurrentTime(),
+                slug,
+                title,
+                path: path || '/'
+            })
+    ])
+        .then( () => pageId)
+        .catch( e => new Error(e))
 }

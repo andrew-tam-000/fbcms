@@ -19,6 +19,8 @@
                 - hello
     - templates
         - [templateId]
+            - hasUrl
+                - true/false
             - fields
                 - field1
                     - id

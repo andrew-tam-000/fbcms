@@ -10,6 +10,7 @@ export default compose(
 
             const template = _.get(pages, [pageId, 'template']);
             const pageFields = _.get(templates, [template, 'fields']);
+            const hasUrl = _.get(templates, [template, 'hasUrl']);
             const pageMeta = _.get(pages, pageId);
 
             const pageData = _.assign(
@@ -23,7 +24,8 @@ export default compose(
 
             return {
                 pageFields,
-                pageData
+                pageData,
+                hasUrl
             }
         },
         (dispatch, {pageId}) => ({

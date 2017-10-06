@@ -9,9 +9,11 @@ export default compose(
         ({ firebase: { pageContent, templates }}, { templateName }) => {
 
             const pageFields = _.get(templates, [templateName, 'fields']);
+            const hasUrl = _.get(templates, [templateName, 'hasUrl']);
 
             return {
-                pageFields
+                pageFields,
+                hasUrl
             }
         },
         (dispatch) => ({

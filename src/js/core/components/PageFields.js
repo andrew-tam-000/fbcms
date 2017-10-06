@@ -5,20 +5,24 @@ import { getComponentForType, getDataFromForm } from '~/core/helpers/index';
 import Button from 'material-ui/Button';
 
 let refs = {};
-const PageFields = ({pageFields, pageData, templateName, onSubmit, onSubmitSuccess}) => {
+const PageFields = ({pageFields, pageData, templateName, onSubmit, onSubmitSuccess, hasUrl}) => {
 
     return ([
         _.map(
             ['title', 'slug'],
             key => (
-                <div key={key}>
-                    <TextField
-                        inputRef={ ref => refs[key] = ref }
-                        name={key}
-                        placeholder={key}
-                        defaultValue={ _.get(pageData, key)}
-                    />
-                </div>
+                key == 'slug' && !hasUrl ? (
+                    null
+                ) : (
+                    <div key={key}>
+                        <TextField
+                            inputRef={ ref => refs[key] = ref }
+                            name={key}
+                            placeholder={key}
+                            defaultValue={ _.get(pageData, key)}
+                        />
+                    </div>
+                )
             )
         ),
         <form key='form' ref={ form => refs.form = form }>
@@ -44,9 +48,9 @@ const PageFields = ({pageFields, pageData, templateName, onSubmit, onSubmitSucce
                     onSubmit({
                         pageData: getDataFromForm(refs.form),
                         metaData: {
-                            title: refs.title.value,
+                            title: _.get(refs, ['title', 'value']),
                             template: templateName,
-                            slug: refs.slug.value
+                            slug: _.get(refs, ['slug', 'value'])
                         }
                     })
                         .then( e => onSubmitSuccess())
@@ -69,6 +73,7 @@ PageFields.PropTypes = {
             ])
         })
     ),
+    hasUrl: PropTypes.bool.isRequired,
     pageData: PropTypes.object,
     templateName: PropTypes.string,
     pageId: PropTypes.string,
