@@ -48,23 +48,38 @@ exports.render = functions.https.onRequest((req, res) => {
     const urlObj = new URL(fullUrl);
     const urlIdentifier = _.last(_.split(urlObj.pathname, '/'));
 
-    getPageIdFromUrlIdentifier(admin.database(), urlIdentifier)
+    const metaPageDataPromise = getPageFromUrlIdentifier(admin.database(), urlIdentifier);
+    const pageDataPromise = metaPageDataPromise
         .then(
-            pageId => getPageDataForPageId(admin.database(), pageId)
+            metaPageData => getPageDataForPageId(admin.database(), _.get(metaPageData, 'id'))
         )
-        .then(
-            pageData => {
-                const Templates = require('./templates').default;
-                //const Templates = require('./templates').default;
-                const Page = Templates.homepage;
+    ;
 
-                res.send(
-                    ReactDOMServer.renderToStaticMarkup(
-                        Page({
-                            bodyProps: pageData
-                        })
-                    )
-                );
+    Promise.all([
+        metaPageDataPromise,
+        pageDataPromise
+    ])
+        .then(
+            ([metaPageData, pageData]) => {
+
+                const Templates = require('./templates').default;
+                const template = _.get(metaPageData, 'template');
+
+                //const Templates = require('./templates').default;
+                const Page = Templates[template];
+                if (Page) {
+                    res.send(
+                        ReactDOMServer.renderToStaticMarkup(
+                            Page({
+                                bodyProps: pageData
+                            })
+                        )
+                    );
+                }
+                else {
+                    res.send(404, new Error(`Template '${template}' not found. Do you have a React Component called '${_.upperFirst(template)}'?`).toString());
+                }
+
             }
         )
     ;
@@ -72,13 +87,13 @@ exports.render = functions.https.onRequest((req, res) => {
 });
 
 // TODO: Handle multiple url identifiers ( at different paths )
-function getPageIdFromUrlIdentifier(database, urlIdentifier) {
+function getPageFromUrlIdentifier(database, urlIdentifier) {
     return database
         .ref('/pages')
         .orderByChild('slug')
         .equalTo(urlIdentifier)
         .once('value')
-        .then( snapshot => _.first(_.keys(snapshot.val())))
+        .then( snapshot => _.first(_.values(snapshot.val())))
     ;
 }
 
