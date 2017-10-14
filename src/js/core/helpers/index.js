@@ -1,9 +1,15 @@
 import _ from 'lodash';
 import TextField from 'material-ui/TextField';
+import Image from '~/core/components/fields/Image';
+import image from '~/core/connectors/image';
+
+const ConnectedImage = image(Image);
 
 export function getComponentForType(type) {
     return type == 'text' ? (
         TextField
+    ) : type == 'image' ? (
+        ConnectedImage
     ) : (
         'div'
     );
