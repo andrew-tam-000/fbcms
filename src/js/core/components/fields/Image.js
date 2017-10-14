@@ -17,7 +17,8 @@ class Image extends Component {
     constructor(props) {
         super(props);
         this.uploadImage = this.uploadImage.bind(this);
-        this.updatePath= this.updatePath.bind(this);
+        this.updatePath = this.updatePath.bind(this);
+        this.removeImage = this.removeImage.bind(this);
         this.state = {
             path: null,
             value: this.props.defaultValue
@@ -75,6 +76,10 @@ class Image extends Component {
                     Upload Image
                 </Button>
 
+                <Button raised onClick={this.removeImage}>
+                    Remove Image
+                </Button>
+
                 <Button raised>
                     Select Image
                 </Button>
@@ -90,6 +95,12 @@ class Image extends Component {
                 */}
             </div>
         );
+    }
+
+    removeImage(e) {
+        this.setState({
+            value: ''
+        });
     }
 
     uploadImage(e) {

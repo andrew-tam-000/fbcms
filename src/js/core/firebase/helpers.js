@@ -110,6 +110,8 @@ export async function updatePage({metaData: { slug, path, title, pageId }, pageD
         throw new Error('No title provided');
     }
 
+    console.debug('Updating page', pageData)
+
     return Promise.all([
         firebase
             .database()
